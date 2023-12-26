@@ -13,3 +13,7 @@ root@zabbix ~]# yum update
 Now use the below command to install Zabbix and necessary packages
 
 [root@zabbix ~]# yum install zabbix-server-mysql zabbix-web-mysql zabbix-agent zabbix-get zabbix-sender zabbix-java-gateway -y
+
+Open the file /etc/httpd/conf.d/zabbix.conf created by Zabbix with your favourite editer
+
+[root@zabbix ~]# vi /etc/httpd/conf.d/zabbix.conf

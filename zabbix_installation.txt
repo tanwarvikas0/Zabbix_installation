@@ -6,3 +6,6 @@ root@zabbix ~]# yum update
 [root@zabbix ~]# systemctl enable httpd && systemctl start httpd
 [root@zabbix ~]# systemctl enable mariadb && systemctl start mariadb 
 – Don’t forget to set a password for the root using mysql_secure_installtion
+
+[root@zabbix ~]# rpm --import http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX
+[root@zabbix ~]# rpm -ivh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-release-3.4-1.el7.centos.noarch.rpm

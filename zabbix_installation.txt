@@ -41,3 +41,17 @@ MariaDB [(none)]> FLUSH PRIVILEGES;
 Query OK, 0 rows affected (0.00 sec)
 MariaDB [(none)]> exit
 Bye
+
+– After creating the zabbix database and user we need to import the zabbix initial database using the below commands:
+
+[root@zabbix ~]# zcat /usr/share/doc/zabbix-server-mysql-3.4.0/create.sql.gz | mysql -uroot -p zabbixdb
+ 
+– Now we need to edit database configuration in the zabbix server configuration file zabbix_server.conf 
+
+[root@zabbix ~]# vi /etc/zabbix/zabbix_server.conf
+ 
+Specify the database name for zabbix , database user name and the password
+DBHost=localhost
+DBName=zabbixdb
+DBUser=zabbixuser
+DBPassword=Password

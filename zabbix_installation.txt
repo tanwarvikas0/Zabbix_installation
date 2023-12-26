@@ -1,0 +1,8 @@
+### Before we begin, note that I have installed lamp stack in my server:
+root@zabbix ~]# yum update
+[root@zabbix ~]# yum install httpd -y
+[root@zabbix ~]# yum install php php-cli php-common php-devel php-pear php-gd php-mbstring php-mysql php-xml -y
+[root@zabbix ~]# yum install mariadb-server -y
+[root@zabbix ~]# systemctl enable httpd && systemctl start httpd
+[root@zabbix ~]# systemctl enable mariadb && systemctl start mariadb 
+– Don’t forget to set a password for the root using mysql_secure_installtion

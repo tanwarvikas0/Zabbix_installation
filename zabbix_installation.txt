@@ -55,3 +55,52 @@ DBHost=localhost
 DBName=zabbixdb
 DBUser=zabbixuser
 DBPassword=Password
+
+– Having SELinux status enabled in enforcing mode, you need to execute the following command to enable successful connection of Zabbix frontend to the server
+
+[root@zabbix ~]# setsebool -P httpd_can_network_connect=1
+[root@zabbix ~]# setsebool -P httpd_can_connect_zabbix=1
+[root@zabbix ~]# setsebool -P zabbix_can_network=1
+
+– SELinux configuration is done, you need to restart Apache web server:
+[root@zabbix ~]# systemctl start httpd
+
+
+– Execute the following command to enable http service and connection between the Zabbix server and agents:
+
+[root@zabbix ~]# firewall-cmd --permanent --add-service=http
+success
+[root@zabbix ~]# firewall-cmd --permanent --zone=public --add-port=10051/tcp
+success
+[root@zabbix ~]# firewall-cmd --permanent --zone=public --add-port=10050/tcp
+success
+[root@zabbix ~]# firewall-cmd --reload
+success
+
+– After adjusting the Selinux settings and the firewall we need to enable and start zabbix service on boot using the bellow commands
+[root@zabbix ~]# systemctl enable zabbix-server 
+[root@zabbix ~]# systemctl start zabbix-server
+[root@zabbix ~]# systemctl enable zabbix-agent 
+[root@zabbix ~]# systemctl start zabbix-agent
+
+Note: If you have issues starting the zabbix-server daemon and the zabbix-agent daemon and you got this error “Job for zabbix-server.service failed because a configured resource limit was exceeded. See “systemctl status zabbix-server.service” and “journalctl -xe” for details“, you need to set Selinux roles using the audit2allow command:
+
+
+[root@zabbix ~]# yum install policycoreutils-python -y
+
+* SELINUX for Zabbix-agent:
+
+[root@zabbix ~]# cat /var/log/audit/audit.log | grep zabbix_agentd | grep denied | audit2allow -M zabbix_agent_setrlimit
+[root@zabbix ~]# semodule -i zabbix_agent_setrlimit.pp
+
+* SELINUX for Zabbix-server:
+
+[root@zabbix ~]# cat /var/log/audit/audit.log | grep zabbix_server | grep denied | audit2allow -M zabbix_server_setrlimit
+[root@zabbix ~]# semodule -i zabbix_server_setrlimit.pp
+
+– Finally:
+
+[root@zabbix ~]# systemctl start zabbix-server
+[root@zabbix ~]# systemctl start zabbix-agent
+
+– Navigate to http://ip_address/zabbix or http://host_name/zabbix

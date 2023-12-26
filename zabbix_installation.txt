@@ -17,3 +17,27 @@ Now use the below command to install Zabbix and necessary packages
 Open the file /etc/httpd/conf.d/zabbix.conf created by Zabbix with your favourite editer
 
 [root@zabbix ~]# vi /etc/httpd/conf.d/zabbix.conf
+
+It’s necessary to uncomment the “date.timezone” setting and set the right timezone for you.
+php_value date.timezone Asia/Kolkata
+– Save the file and don’t forget to reload httpd service using the below command:
+
+[root@zabbix ~]# systemctl reload httpd
+
+First we need to create zabbix database (zabbixdb) and create a zabbix user (zabbixuser).
+
+[root@zabbix ~]# mysql -u root -p
+Enter password: 
+Welcome to the MariaDB monitor. Commands end with ; or \g.
+Your MariaDB connection id is 10
+Server version: 5.5.47-MariaDB MariaDB Server
+Copyright (c) 2000, 2015, Oracle, MariaDB Corporation Ab and others.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+MariaDB [(none)]> CREATE DATABASE zabbixdb CHARACTER SET utf8 COLLATE utf8_bin;
+Query OK, 1 row affected (0.00 sec) 
+MariaDB [(none)]> GRANT ALL PRIVILEGES ON zabbixdb.* TO zabbixuser@localhost IDENTIFIED BY "Password";
+Query OK, 0 rows affected (0.00 sec)
+MariaDB [(none)]> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.00 sec)
+MariaDB [(none)]> exit
+Bye
